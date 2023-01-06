@@ -1,0 +1,20 @@
+{
+	"properties":{
+		"tileSize":64
+	},
+	"gui":"assets/gui/gui0.json",
+	"items":[
+		{
+			"type":"Sprite",
+			"x":100,
+			"y":100,
+			"src":"assets/caption.png"
+		},
+		{
+			"type":"Sprite",
+			"x":200,
+			"y":200,
+			"src":"assets/caption.png"
+		}
+	]
+}
