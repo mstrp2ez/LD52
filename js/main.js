@@ -13,7 +13,7 @@ var $=function(sel){
 	document.addEventListener('DOMContentLoaded',function(){
 		let canvas1=new window.Canvas();
 		
-		canvas1.build(document.querySelector('.content'), 1920,1080,'canvas');
+		canvas1.build(document.querySelector('.content'), 800,600,'canvas');
 		window.canvas=canvas1;
 		canvas1.clearScreen();
 		new window.Bootstrap(); //Bootstraps first scene

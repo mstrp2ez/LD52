@@ -210,10 +210,18 @@
 		fireEvent(event){
 			if(this.eventListeners.hasOwnProperty(event)){
 				for(let i=0;i<this.eventListeners[event].length;i++){
-					let ret=this.eventListeners[event][i](this.animations[this.currentAnimation]);
+					let ret=this.eventListeners[event][i](this);//this.animations[this.currentAnimation]);
 					if(ret===false){
 						this.eventListeners[event].splice(i,1);
 					}
+				}
+			}
+		}
+		unregisterEventlistener(event,callback){
+			if(this.eventListeners.hasOwnProperty(event)){
+				const p=this.eventListeners[event].indexOf(callback);
+				if(p!=-1){
+					this.eventListeners[event].splice(p,1);
 				}
 			}
 		}

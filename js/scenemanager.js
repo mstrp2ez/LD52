@@ -58,7 +58,7 @@
 		onRender(ctx,gui){
 			if(!this.noDraw){
 				var wc=this.calculateWorldCoordinates();
-				ctx.fillStyle="#fff";
+				ctx.fillStyle="#000";
 				ctx.fillRect(wc.x,wc.y,this.w,this.h);
 			}
 			if(this.isSelected()){
@@ -169,6 +169,9 @@
 				}
 			}
 			return obj;
+		}
+		setWidth(width){
+			this.w=width;
 		}
 		getWidth(){
 			return this.w;
@@ -401,13 +404,14 @@
 		}
 		postLoad(){
 			document.addEventListener('wheel',this.onScroll.bind(this),{passive:false});
+			document.addEventListener('keydown',this.onDocumentKeydown.bind(this));
+			document.addEventListener('keyup',this.onDocumentKeyup.bind(this));
 			const canvas=window.canvas.getCanvas();
 			canvas.addEventListener('mousedown',this.onCanvasMousedown.bind(this));
 			canvas.addEventListener('mouseup',this.onCanvasMouseup.bind(this));
 			canvas.addEventListener('mousemove',this.onCanvasMousemove.bind(this));
 			canvas.addEventListener('click',this.onCanvasClick.bind(this));
-			document.addEventListener('keydown',this.onDocumentKeydown.bind(this));
-			document.addEventListener('keyup',this.onDocumentKeyup.bind(this));
+			
 			
 			const target=window.currentScene.getSceneProperty("cameraTarget");
 			if(target!==undefined){
@@ -525,7 +529,6 @@
 		}
 		onUpdate(time){
 			if(time-this.lastUpdate>this.tickTime){
-				globalNuMSAT=0;
 				this.items.forEach(x => x.onUpdate(time));
 				this.lastUpdate=time;
 			}
@@ -579,6 +582,16 @@
 			});
 		}
 		Unload(){
+			
+			document.removeEventListener('wheel',this.onScroll.bind(this),{passive:false});
+			const canvas=window.canvas.getCanvas();
+			canvas.removeEventListener('mousedown',this.onCanvasMousedown.bind(this));
+			canvas.removeEventListener('mouseup',this.onCanvasMouseup.bind(this));
+			canvas.removeEventListener('mousemove',this.onCanvasMousemove.bind(this));
+			canvas.removeEventListener('click',this.onCanvasClick.bind(this));
+			document.removeEventListener('keydown',this.onDocumentKeydown.bind(this));
+			document.removeEventListener('keyup',this.onDocumentKeyup.bind(this));
+			
 			for(let i=0;i<this.items.length;i++){
 				if(this.items[i].Unload){
 					this.items[i].Unload();
@@ -586,6 +599,7 @@
 				this.items[i]=null;
 			}
 			this.items.length=0;
+			window.Camera.reset();
 		}
 		exportScene(includeGUI,exempt){
 			let obj={'items':[]};
@@ -615,6 +629,11 @@
 		constructor(params){
 			/* this.centerx=0;
 			this.centery=0; */
+			this.origin={x:0,y:0};
+			this.scale=1;
+			this.target=null;
+		}
+		reset(){
 			this.origin={x:0,y:0};
 			this.scale=1;
 			this.target=null;
@@ -656,10 +675,23 @@
 			let c=window.canvas.getCanvas();
 			if(!this.target){return;}
 			const p=this.target.getPosition();
-			this.origin.x=-(p.x-c.width/4);
-			this.origin.y=-(p.y-c.height/4);
+			this.origin.x=-(p.x-c.width/2);
+			this.origin.y=-(p.y-c.height/2);
 		}
 	}
 	window.Camera=new Camera();
+	
+	class GameStart extends SceneItem{
+		constructor(){
+			super();
+		}
+		loadFromProperties(params){
+			super.loadFromProperties(params);
+		}
+		onKeydown(event){
+			window.currentScene.queueScene("assets/scenes/scene0.json");
+		}
+	}
+	window.GameStart=GameStart;
 	
 })();

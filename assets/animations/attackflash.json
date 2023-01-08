@@ -1,0 +1,36 @@
+{
+	"spritesrc":"assets/animations/attackflash.png",
+	"animations":[{
+			"name":"idle",
+			"frames":[{
+					"duration":100,
+					"x":0,
+					"y":0,
+					"w":64,
+					"h":64
+				},
+				{
+					"duration":100,
+					"x":64,
+					"y":0,
+					"w":64,
+					"h":64
+				},
+				{
+					"duration":100,
+					"x":128,
+					"y":0,
+					"w":64,
+					"h":64
+				},
+				{
+					"duration":100,
+					"x":192,
+					"y":0,
+					"w":64,
+					"h":64
+				}
+			]
+		}
+	]
+}

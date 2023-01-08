@@ -1,0 +1,34 @@
+{
+	"spritesrc":"assets/animations/gameover.png",
+	"animations":[{
+			"name":"idle",
+			"frames":[
+			{
+				"duration": 100,
+				"x": 256,
+				"y": 0,
+				"w": 256,
+				"h": 128
+			}, {
+				"duration": 100,
+				"x": 512,
+				"y": 0,
+				"w": 256,
+				"h": 128
+			}, {
+				"duration": 100,
+				"x": 768,
+				"y": 0,
+				"w": 256,
+				"h": 128
+			}, {
+				"duration": 100,
+				"x": 1024,
+				"y": 0,
+				"w": 256,
+				"h": 128
+			}
+			]
+		}
+	]
+}

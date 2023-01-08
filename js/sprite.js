@@ -35,14 +35,23 @@
 			
 			this.scalex=params.scalex===undefined?1:params.scalex;
 			this.scaley=params.scaley===undefined?1:params.scaley;
-			this.load(params).then(()=>{this.loaded=true});
+			const fit=params.fit??=false;
+			this.fitw=params.fitw??=false;
+			this.fith=params.fith??=false;
+			this.fitw=this.fit||this.fitw;
+			this.fith=this.fit||this.fith;
+			
+			return this.load(params).then(()=>{this.loaded=true});
 		}
 		onRender(ctx){
 			
 			if(!this.loaded){return;}
 			const wc=this.calculateWorldCoordinates();
 			
-			ctx.drawImage(this.image,wc.x,wc.y,this.image.width,this.image.height);
+			let w=this.fitw==false?this.image.width:this.parent.w;
+			let h=this.fith==false?this.image.height:this.parent.h;
+
+			ctx.drawImage(this.image,wc.x,wc.y,w,h);
 			super.onRender(ctx);
 		}
 		Serialize(obj,exempt){

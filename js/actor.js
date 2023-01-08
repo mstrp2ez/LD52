@@ -18,8 +18,8 @@ class Actor extends SceneItem{
 	constructor(){
 		super();
 		this.velocity=new Vec2(0,0);
-		this.hspeed=0.4;
-		this.vspeed=0.4;
+		this.hspeed=0.2;
+		this.vspeed=0.2;
 		this.keymap=new Keymap();
 		this.onGround=true;
 		const globalF=window.currentScene.getSceneProperty("globalForce");
@@ -39,6 +39,7 @@ class Actor extends SceneItem{
 	}
 	onUpdate(time){
 		super.onUpdate(time);
+		if(GameState.isPaused()){return;}
 		this.velocity.addV(this.globalForce);
 
 		if(this.keymap.getKey(37)){
@@ -65,8 +66,11 @@ class Actor extends SceneItem{
 	}
 	
 	calculateAnimation(){
+		if(this.isAttacking==true){return;}
 		const speed=this.velocity.length();
-		const animation=this.getChildById("playeranim");
+		let animations=this.getItemsByTypes([SpriteAnimation]);//this.getChildById("playeranim");
+		if(animations.length<=0){return;}
+		const animation=animations[0];
 		if(speed<0.1){
 			animation.setAnimation("idle");
 		}else{
@@ -95,6 +99,7 @@ class Actor extends SceneItem{
 	onCollision(mtds){
 		//if(mtds.length<=0){this.onGround=false;}
 		mtds.forEach((item) => {
+			if(item.mtd==null){return;}
 			item.own.separateObjects(item.own,item.other,item.mtd);
 			const oppositeForce=item.mtd.Copy();
 			oppositeForce.multS(-1);
@@ -112,7 +117,7 @@ class BBShape extends SceneItem{
 	constructor(){
 		super();
 		this.vertices=[];
-		this.debugDraw=true;
+		this.debugDraw=false;
 	}
 	loadFromProperties(params){
 		super.loadFromProperties(params);
@@ -316,23 +321,48 @@ class BBPolygon extends BBShape{
 }
 window.BBPolygon=BBPolygon;
 
-
-/* class Boundingbox extends SceneItem{
+class ElasticFollow extends SceneItem{
 	constructor(){
 		super();
-		
 	}
 	loadFromProperties(params){
-		return super.loadFromProperties(params).then(()=>{
-			
-		});
+		super.loadFromProperties(params);
+		this.target=params.target??=false;
+		this.proximity=params.proximity??=1000;
+		this.speed=params.speed??=3;
 	}
 	postLoad(){
 		super.postLoad();
+		if(this.target){
+			this.target=SceneManager.getItemById(this.target);
+		}
+	}
+	onUpdate(time){
+		super.onUpdate(time);
+		if(GameState.isPaused()){return;}
+		this.followTarget();
+	}
+	followTarget(){
+		if(this.target==false){return;}
 		
+		
+		
+		let velocity=new Vec2();
+		let tmp0=this.calculateWorldCoordinates();
+		let tmp1=this.target.calculateWorldCoordinates();
+		if(distanceTo(tmp0,tmp1)>this.proximity){return;}
+		
+		const p0=new Vec2(tmp0.x,tmp0.y);
+		const p1=new Vec2(tmp1.x,tmp1.y);
+		
+		let d=p1.Copy().subV(p0);
+		if(d.length()<5){return;}
+		d.normalize();
+		d.multS(this.speed);
+		this.position.addV(d);
 	}
 }
-window.Boundingbox=Boundingbox; */
+window.ElasticFollow=ElasticFollow;
 
 class AnimationController extends SceneItem{
 	constructor(){

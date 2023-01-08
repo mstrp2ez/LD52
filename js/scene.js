@@ -13,27 +13,35 @@
 			window.currentScene=this;
 			this.GUI=null;
 			this.canvas=canvas;
+			this.changeScene=null;
 			//this.loadScene('assets/scenes/scene0.json');
 		}
 		getGUI(){
 			return this.GUI;
 		}
-		async loadScene(src){
+		queueScene(scene){
+			this.changeScene=scene;
+		}
+		loadScene(src){
 			this.lastSceneProps=this.sceneProperties;
 			this.sceneSrc=src;
 			this.Unload();
 			
 			const path=src;
-			const response=await fetch(path);
-			const json=await response.json();
-			return this.onLoad(json);
+			fetch(path).then(data => data.json()).then(json => {
+				return this.onLoad(json);
+			});
 		}
-		async onLoad(json,callback){
+		onLoad(json,callback){
 			this.GUI=new GUI();
 			return this.GUI.Load(json.gui).then(() => {this.onGUILoad(json)});
 		}
 		onGUILoad(json){
 			this.parseSceneProperties(json.properties);
+			if(this.sceneProperties.canvasbg!==undefined){
+				this.canvas.setBgColor(this.sceneProperties.canvasbg);
+			}
+			
 			let sceneItems=json.items;
 			this.parseScene(sceneItems,SceneManager,true).then(()=>{
 				SceneManager.postLoad();
@@ -93,7 +101,10 @@
 			
 			//let frontBufferCtx=cnvs.getFrontBufferContext();
 			//frontBufferCtx.drawImage(cnvs.getCanvas(),0,0);
-			
+			if(this.changeScene!=null){
+				this.loadScene(this.changeScene);
+				this.changeScene=null;
+			}
 			window.requestAnimationFrame(this.run.bind(this));
 		}
 		init(){

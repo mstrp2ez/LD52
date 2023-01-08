@@ -1,0 +1,20 @@
+{
+	"properties":{
+		"tileSize":64,
+		"globalForce":{
+			"x":0,
+			"y":0
+		},
+		"canvasbg":"#000"
+	},
+	"gui":"assets/gui/gui1.json",
+	"items":[
+		{
+			"type":"SpriteAnimation",
+			"x":272,
+			"y":236,
+			"animsrc":"assets/animations/gameover.json",
+			"stopatendofanimation":true
+		}
+	]
+}

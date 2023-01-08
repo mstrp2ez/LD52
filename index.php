@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Apparaten - LD51</title>
+  <title>Apparaten - LD52</title>
   <meta name="description" content="LD51">
   <meta name="author" content="Mstrp">
 
@@ -23,20 +23,26 @@
 <header>
 </header>
 <body>
-<img src="assets/caption.png" alt>
 <button onClick="onFullscreen()">Fullscreen</button>
 <div class="content"></div>
 
 
+<script src="js/gamestate.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/canvas.js"></script>
 <script src="js/vec2.js"></script>
 <script src="js/bootstrap.js"></script>
 <script src="js/scenemanager.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/actor.js"></script>
 <script src="js/animation.js"></script>
-<script src="js/tilemap.js"></script>
 <script src="js/sprite.js"></script>
-<script src="js/effects.js"></script>
+<script src="js/reaper.js"></script>
+<script src="js/lostsoul.js"></script>
+<script src="js/damagetext.js"></script>
+<script src="js/tilemap.js"></script>
+
+<script src="js/effect.js"></script>
 <script src="js/gui.js"></script>
 
 <script src="js/scene.js"></script>

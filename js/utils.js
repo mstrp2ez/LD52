@@ -55,18 +55,26 @@ class EventBroadcaster{
 		this.eventListeners={};
 		this.owner=owner;
 	}
-	registerEventListener(event,callback){
+	registerEventListener(event,callback,fireOnce){
+		fireOnce=fireOnce??=false;
 		if(this.eventListeners.hasOwnProperty(event)){
-			this.eventListeners[event].push(callback);
+			this.eventListeners[event].push({c:callback,o:fireOnce});
 		}else{
-			this.eventListeners[event]=[callback];
+			this.eventListeners[event]=[{c:callback,o:fireOnce}];
 		}
 	}
 	fireEvent(event){
 		if(this.eventListeners.hasOwnProperty(event)){
+			let shouldRemove=[];
 			for(let i=0;i<this.eventListeners[event].length;i++){
-				this.eventListeners[event][i](this.owner);
+				this.eventListeners[event][i].c(this.owner);
+				if(this.eventListeners[event][i].o){
+					shouldRemove.push(this.eventListeners[event][i]);
+				}
 			}
+			shouldRemove.forEach(item=>{
+				this.eventListeners[event].splice(this.eventListeners[event].indexOf(item),1);
+			});
 		}
 	}
 	Unload(){
